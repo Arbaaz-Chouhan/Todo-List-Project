@@ -1,0 +1,83 @@
+body {
+    display: grid;
+    justify-content: center;
+    margin-top: 100px;
+    background-color: chocolate;
+}
+
+#todo {
+    width: 300px;
+    text-align: center;
+    padding: 10px;
+}
+
+#button {
+    background-color: aqua;
+    border: none;
+}
+
+table {
+    margin-top: 30px;
+    background-color: cornflowerblue;
+}
+
+th {
+    border: 2px solid black;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+td {
+    border: 2px solid black;
+    margin: 5px;
+    padding: 5px;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+
+
+.trash {
+    background-color: black;
+    border: none;
+    color: white;
+}
+
+.delete {
+    background-color: black;
+    border: none;
+    color: white;
+}
+
+
+
+#form-value {
+    margin-top: 20px;
+    width: 500px;
+    height: 200px;
+    border: 2px solid black;
+    text-align: center;
+    display: grid;
+    justify-content: center;
+    display: none;
+
+}
+
+
+
+#todo-value {
+    width: 450px;
+    margin-top: 5px;
+}
+
+.btn {
+
+    width: 150px;
+    border-radius: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+    background-color: black;
+    color: white;
+    margin: 10px;
+}
