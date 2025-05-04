@@ -6,117 +6,74 @@ const todoValue = document.getElementById("todo-value");
 const changekValue = document.getElementById("change");
 const rightvalue = document.getElementById("right");
 
-const body = document.querySelector("body")
-const tr = document.createElement("tr");
-const id1 = document.createElement("th");
-const task = document.createElement("th");
-const time = document.createElement("th");
-
-id1.innerText = "id";
-task.innerText = "task"
-time.innerText = "created time";
-tr.append(id1, task, time);
-table.append(tr);
-
-button.addEventListener("click", todotext)
-
 let id = 1;
-function todotext(e) {
-    e.preventDefault();
+let currentEditingRow = null;
 
+// Header Row
+const tr = document.createElement("tr");
+["ID", "Task", "Created Time", "Actions"].forEach(text => {
+    const th = document.createElement("th");
+    th.innerText = text;
+    tr.appendChild(th);
+});
+table.appendChild(tr);
+
+// Add Task
+button.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (todo.value.trim() === "") return;
 
     const tr = document.createElement("tr");
-    const currentId = document.createElement("td");
-    const task = document.createElement("td");
-    const currentTime = document.createElement("td");
+    const tdId = document.createElement("td");
+    const tdTask = document.createElement("td");
+    const tdTime = document.createElement("td");
+    const tdActions = document.createElement("td");
 
-    const time = new Date();
+    tdId.innerText = id++;
+    tdTask.innerText = todo.value;
+    const now = new Date();
+    tdTime.innerText = `${now.toLocaleTimeString()} (${now.toLocaleDateString()})`;
 
-    currentId.innerText = id++;
-    task.innerText = todo.value;
-    const CurruntHours = time.getHours()
-    const CurruntMin = time.getMinutes()
-    const CurruntSec = time.getSeconds()
-    const CurruntFull = time.getFullYear()
-    const CurruntDate = time.getDate()
-    const CurruntMonth = time.getMonth()
-    currentTime.innerText = `${CurruntHours}:${CurruntMin}:${CurruntSec}(${CurruntDate}/${CurruntMonth}/${CurruntFull})`
-
-    tr.append(currentId, task, currentTime);
-    table.append(tr);
-
-
-    // let data = {
-    //     currentId : currentId.value,
-    //     task : task.value,
-    //     CurruntTime : currentTime.value
-    // }
-
-    const trashbutton = document.createElement("button");
-    trashbutton.innerHTML = `<i class="fa-solid fa-check"></i>`
-    trashbutton.classList.add("trash");
-    tr.append(trashbutton);
-    table.append(tr)
-
-    const deleteButton = document.createElement("button");
-    deleteButton.innerHTML = `<i class="fas fa-trash"></i>`
-    deleteButton.classList.add("delete");
-    tr.append(deleteButton);
-    table.append(tr);
-
-    deleteButton.addEventListener("click", generateUUID);
-
-    function generateUUID() {
-        const time = new Date();
-        const ms = time.getMilliseconds() * Math.random() * 100;
-        let uuid = parseInt(ms);
-        const min = 97;
-        const max = 122;
-        for (let i = 0; i < 10; i++) {
-            const randomCharCode = Math.random() * (max - min) + min;
-            uuid += String.fromCharCode(randomCharCode);
-        }
-        return uuid;
-    }
-
-    deleteButton.addEventListener("click", () => {
-        tr.remove();
-    })
-
-    trashbutton.addEventListener("click", trash);
-
-    function trash() {
+    // Done Button
+    const doneBtn = document.createElement("button");
+    doneBtn.className = "trash";
+    doneBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+    doneBtn.addEventListener("click", () => {
         tr.style.opacity = "0.5";
-        todoValue.value = tr.children[1].innerText;
+        todoValue.value = tdTask.innerText;
         formValue.style.display = "grid";
-        changekValue.addEventListener("click", change);
+        currentEditingRow = tdTask;
+    });
 
-        // let storeData = JSON.parse(localStorage.getItem("saveData")) || [];
-        // storeData.push(todo);
-        localStorage.setItem("savaData", JSON.stringify(todo, currentId, currentTime));
-        let get = localStorage.getItem("saveData");
-        console.log(get);
+    // Delete Button
+    const delBtn = document.createElement("button");
+    delBtn.className = "delete";
+    delBtn.innerHTML = `<i class="fas fa-trash"></i>`;
+    delBtn.addEventListener("click", () => tr.remove());
 
-        function change(e) {
-            e.preventDefault();
-
-            task.innerText = todoValue.value;
-            formValue.style.display = "none";
-            tr.style.opacity = "1.9";
-        }
-    }
-
-    rightvalue.addEventListener("click", right);
-
-    function right(e) {
-        e.preventDefault();
-        formValue.style.display = "none";
-
-    }
-
+    tdActions.append(doneBtn, delBtn);
+    tr.append(tdId, tdTask, tdTime, tdActions);
+    table.appendChild(tr);
     todo.value = "";
-}
+});
 
+// Change Edited Task
+changekValue.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentEditingRow) {
+        currentEditingRow.innerText = todoValue.value;
+        formValue.style.display = "none";
+        currentEditingRow.parentElement.style.opacity = "1";
+        currentEditingRow = null;
+    }
+});
 
-
-
+// Cancel Edit
+rightvalue.addEventListener("click", (e) => {
+    e.preventDefault();
+    formValue.style.display = "none";
+    if (currentEditingRow) {
+        currentEditingRow.parentElement.style.opacity = "1";
+        currentEditingRow = null;
+    }
+});
